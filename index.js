@@ -19,7 +19,13 @@ app.get("/api/1451001600000", (req, res) => res.json({
 }));
 
 app.get("/api/:date?", function (req, res) {
-  let date = new Date(req.params.date);
+  let date;
+  if (req.params.date) {
+    date = new Date(req.params.date);
+  } else {
+    date = new Date();
+  }
+  
   if (date.toString() == "Invalid Date") res.json({ error : date.toString()});
 
   res.json({
