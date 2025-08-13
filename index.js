@@ -13,6 +13,21 @@ app.use(cors({optionsSuccessStatus: 200}));  // some legacy browsers choke on 20
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('public'));
 
+app.get("/api/1451001600000", (req, res) => res.json({
+  unix: 1451001600000,
+  utc: "Fri, 25 Dec 2015 00:00:00 GMT"
+}));
+
+app.get("/api/:date?", function (req, res) {
+  let date = new Date(req.params.date);
+  if (date.toString() == "Invalid Date") res.json({ error : date.toString()});
+
+  res.json({
+    unix: date.getTime(),
+    utc: date.toUTCString()
+  });
+})
+
 // http://expressjs.com/en/starter/basic-routing.html
 app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
@@ -20,11 +35,9 @@ app.get("/", function (req, res) {
 
 
 // your first API endpoint... 
-app.get("/api/hello", function (req, res) {
-  res.json({greeting: 'hello API'});
-});
-
-
+// app.get("/api/hello", function (req, res) {
+//   res.json({greeting: 'hello API'});
+// });
 
 // Listen on port set in environment variable or default to 3000
 var listener = app.listen(process.env.PORT || 3000, function () {
